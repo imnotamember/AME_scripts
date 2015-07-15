@@ -54,10 +54,18 @@ def hash_to_participant(hash_name, user_list):
 def swap_date_format(dict_list, column):
     for i in dict_list:
         temp_date_time = i[column]
-        if temp_date_time.isspace() is False and temp_date_time != '':
+        if len(temp_date_time) > 1:
             temp_date_time = temp_date_time.replace('/', '-')
+            temp_date_time = list(temp_date_time)
+            a = temp_date_time.pop(3)
+            b = temp_date_time.pop(3)
+            c = temp_date_time.pop(3)
+            temp_date_time.insert(0, a)
+            temp_date_time.insert(1, b)
+            temp_date_time.insert(2, c)
+            temp_date_time = ''.join(temp_date_time)
         else:
-            temp_date_time = '.'
+            temp_date_time = '-888'
         i[column] = temp_date_time
     return dict_list
 
@@ -69,7 +77,7 @@ def swap_values_numerals(dict_list, key, translator):
         if temp in translator:
             temp = translator[temp]
         else:
-            temp = '-999'
+            temp = '-888'
         i[key] = temp
     return dict_list
 
