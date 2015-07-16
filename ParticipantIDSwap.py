@@ -54,7 +54,9 @@ def hash_to_participant(hash_name, user_list):
 def swap_date_format(dict_list, column):
     for i in dict_list:
         temp_date_time = i[column]
-        if len(temp_date_time) > 1:
+        if temp_date_time == '.':
+            temp_date_time = '-888'
+        elif len(temp_date_time) > 1:
             temp_date_time = temp_date_time.replace('/', '-')
             temp_date_time = list(temp_date_time)
             a = temp_date_time.pop(3)
@@ -65,7 +67,7 @@ def swap_date_format(dict_list, column):
             temp_date_time.insert(2, c)
             temp_date_time = ''.join(temp_date_time)
         else:
-            temp_date_time = '-888'
+            temp_date_time = '-999'
         i[column] = temp_date_time
     return dict_list
 
@@ -76,8 +78,10 @@ def swap_values_numerals(dict_list, key, translator):
         temp = i[key]
         if temp in translator:
             temp = translator[temp]
-        else:
+        elif temp == '.':
             temp = '-888'
+        else:
+            temp = '-999'
         i[key] = temp
     return dict_list
 
@@ -118,6 +122,28 @@ v1_3 = {'1': 1, '2': 2, '3 or more': 3}
 alc_0_1 = {'Yes- I find I cannot remember things I did or said when drinking': 1,
            'No- I do not have difficulty remembering things I did or said when drinking': 0
            }
+alc_range = {'0': 0,
+             '1': 1,
+             '2': 2,
+             '3': 3,
+             '4': 4,
+             '5': 5,
+             '6': 6,
+             '7': 7,
+             '8': 8,
+             '9': 9,
+             '10': 10,
+             '11': 11,
+             '12': 12,
+             '13': 13,
+             '14': 14,
+             '15': 15,
+             '16': 16,
+             '17': 17,
+             '18': 18,
+             '19': 19,
+             '20': 20,
+             }
 IM_type = {'A thought': 1, 'An image': 2, 'A combination of a thought and image': 3}
 v0_4_skip = {'Skipped': -888.00,
              'Not at all': 0,
@@ -157,7 +183,6 @@ values_to_numerals = {'Dreams': y_n,
                       'IM_Distress1': v0_4_skip,
                       'IM_Distress2': v0_4_skip,
                       'IM_Distress3': v0_4_skip,
-                      'NoAlc_5': v0_4_skip,
                       'IM_type1': IM_type,
                       'IM_type2': IM_type,
                       'IM_type3': IM_type,
@@ -167,6 +192,8 @@ values_to_numerals = {'Dreams': y_n,
                       'NoAlc_1': y_n_skip,
                       'NoAlc_2': y_n_skip,
                       'NoAlc_3': y_n_skip,
+                      'NoAlc_4': v0_4_skip,
+                      'NoAlc_5': v0_4_skip,
                       'SexActivities1': y_n_skip,
                       'SexActivities3': y_n_skip,
                       'Alc_intox1': intox_0_11,
@@ -174,6 +201,8 @@ values_to_numerals = {'Dreams': y_n,
                       'Alc_intoxNow': intox_0_11,
                       'Alc_black1': alc_0_1,
                       'Alc_black2': alc_0_1,
+                      'Alc_num1': alc_range,
+                      'Alc_num2': alc_range
                       }
 
 for key in values_to_numerals.keys():
@@ -190,3 +219,4 @@ with open(file_name, 'w') as csvfile:
     dictwriter = csv.DictWriter(csvfile, fieldnames, lineterminator='\n')
     dictwriter.writeheader()
     dictwriter.writerows(sorted(dict_list))
+
